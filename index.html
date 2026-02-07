@@ -151,9 +151,6 @@
         if (isNaN(val) || val <= 0) return null;
         
         const target = Math.round(val * 10);
-        const dp = new Array(target + 1).fill(null);
-        dp[0] = { stamps: {}, totalCount: 0, varietyCount: 0, nonIntCount: 0 };
-
         const coins = DENOMINATIONS
                         .filter(d => !disabledStamps.includes(d.id))
                         .map(d => ({ 
@@ -162,61 +159,71 @@
                           isInteger: Number.isInteger(d.value)
                         })).sort((a, b) => b.val - a.val);
 
+        const minStampsTable = new Array(target + 1).fill(Infinity);
+        minStampsTable[0] = 0;
         for (let i = 1; i <= target; i++) {
+          for (const coin of coins) {
+            if (i >= coin.val) {
+              minStampsTable[i] = Math.min(minStampsTable[i], minStampsTable[i - coin.val] + 1);
+            }
+          }
+        }
+
+        const dp = new Array(target + 1).fill(null);
+        dp[0] = { stamps: {}, totalCount: 0, varietyCount: 0, nonIntCount: 0 };
+
+        for (let i = 1; i <= target; i++) {
+          const limit = minStampsTable[i] * 2;
+          const candidates = [];
+
+          for (const coin of coins) {
+            if (i % coin.val === 0) {
+              const count = i / coin.val;
+              if (count <= limit) {
+                candidates.push({
+                  stamps: { [coin.id]: count },
+                  totalCount: count,
+                  varietyCount: 1,
+                  nonIntCount: coin.isInteger ? 0 : count
+                });
+              }
+            }
+          }
+
           for (const coin of coins) {
             if (i >= coin.val && dp[i - coin.val] !== null) {
               const prev = dp[i - coin.val];
               const newStamps = { ...prev.stamps };
               newStamps[coin.id] = (newStamps[coin.id] || 0) + 1;
+              const currentTotal = prev.totalCount + 1;
               
-              const currentNew = {
-                stamps: newStamps,
-                totalCount: prev.totalCount + 1,
-                varietyCount: Object.keys(newStamps).length,
-                nonIntCount: prev.nonIntCount + (coin.isInteger ? 0 : 1)
-              };
-
-              if (dp[i] === null) {
-                dp[i] = currentNew;
-              } else {
-                const existing = dp[i];
-                let shouldReplace = false;
-
-                if (priority === 'stamps') {
-                  // 枚數優先
-                  if (currentNew.totalCount < existing.totalCount) {
-                    shouldReplace = true;
-                  } else if (currentNew.totalCount === existing.totalCount) {
-                    if (currentNew.varietyCount < existing.varietyCount) {
-                      shouldReplace = true;
-                    } else if (currentNew.varietyCount === existing.varietyCount) {
-                       // 同樣枚數和款式，優先使用整數面額票 (最小化非整數票數量)
-                       if (currentNew.nonIntCount < existing.nonIntCount) {
-                         shouldReplace = true;
-                       }
-                    }
-                  }
-                } else {
-                  // 款式優先
-                  if (currentNew.varietyCount < existing.varietyCount) {
-                    shouldReplace = true;
-                  } else if (currentNew.varietyCount === existing.varietyCount) {
-                    if (currentNew.totalCount < existing.totalCount) {
-                      shouldReplace = true;
-                    } else if (currentNew.totalCount === existing.totalCount) {
-                       // 同樣枚數和款式，優先使用整數面額票
-                       if (currentNew.nonIntCount < existing.nonIntCount) {
-                         shouldReplace = true;
-                       }
-                    }
-                  }
-                }
-
-                if (shouldReplace) {
-                  dp[i] = currentNew;
-                }
+              if (currentTotal <= limit) {
+                candidates.push({
+                  stamps: newStamps,
+                  totalCount: currentTotal,
+                  varietyCount: Object.keys(newStamps).length,
+                  nonIntCount: prev.nonIntCount + (coin.isInteger ? 0 : 1)
+                });
               }
             }
+          }
+
+          if (candidates.length > 0) {
+            dp[i] = candidates.reduce((best, current) => {
+              if (priority === 'stamps') {
+                if (current.totalCount < best.totalCount) return current;
+                if (current.totalCount > best.totalCount) return best;
+                if (current.varietyCount < best.varietyCount) return current;
+                if (current.varietyCount > best.varietyCount) return best;
+                return current.nonIntCount < best.nonIntCount ? current : best;
+              } else {
+                if (current.varietyCount < best.varietyCount) return current;
+                if (current.varietyCount > best.varietyCount) return best;
+                if (current.totalCount < best.totalCount) return current;
+                if (current.totalCount > best.totalCount) return best;
+                return current.nonIntCount < best.nonIntCount ? current : best;
+              }
+            });
           }
         }
         return dp[target];
@@ -258,18 +265,36 @@
                     </div>
                   </div>
                   
-                  <div className="flex flex-col items-center justify-center">
-                    <h1 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">目標郵費 (最高 $9999.9)</h1>
-                    <div className="text-4xl font-black text-slate-900 dark:text-white flex items-center gap-1">
-                      <span className="text-slate-300 dark:text-slate-600 text-2xl">$</span>
-                      <span>{targetPostage || '0'}</span>
-                      <span className="w-0.5 h-8 bg-blue-500 animate-pulse rounded-full ml-1"></span>
-                    </div>
-                    {priority === 'varieties' && (
-                      <div className="mt-1 px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/40 text-[10px] font-bold text-indigo-500 dark:text-indigo-400 rounded-full uppercase tracking-tighter">
-                        款數優先模式
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col flex-1">
+                      <h1 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest mb-1">目標郵費</h1>
+                      <div className="text-4xl font-black text-slate-900 dark:text-white flex items-center gap-1">
+                        <span className="text-slate-300 dark:text-slate-600 text-2xl">$</span>
+                        <span>{targetPostage || '0'}</span>
+                        <span className="w-0.5 h-8 bg-blue-500 animate-pulse rounded-full ml-1"></span>
                       </div>
-                    )}
+                    </div>
+                    
+                    {/* 快捷切換模式按鈕 */}
+                    <button 
+                      onClick={() => setPriority(prev => prev === 'stamps' ? 'varieties' : 'stamps')}
+                      className={`flex flex-col items-center justify-center px-3 py-2 rounded-xl border-2 transition-all active:scale-95 shadow-sm
+                        ${priority === 'stamps' 
+                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' 
+                          : 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400'}`}
+                    >
+                      {priority === 'stamps' ? (
+                        <>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mb-0.5"><rect width="8" height="8" x="3" y="3" rx="1"/><rect width="8" height="8" x="13" y="3" rx="1"/><rect width="8" height="8" x="3" y="13" rx="1"/><rect width="8" height="8" x="13" y="13" rx="1"/></svg>
+                          <span className="text-[10px] font-black uppercase tracking-tighter">數量優先</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mb-0.5"><path d="M21 16V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2Z"/><path d="M7 12h10"/></svg>
+                          <span className="text-[10px] font-black uppercase tracking-tighter">面值優先</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
 
@@ -369,15 +394,15 @@
                       onClick={() => setPriority('stamps')}
                       className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${priority === 'stamps' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 opacity-60'}`}
                     >
-                      <span className={`text-xs font-black mb-1 ${priority === 'stamps' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-slate-400'}`}>枚數少優先</span>
-                      <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold leading-tight">儘量使用最少數量郵票</span>
+                      <span className={`text-xs font-black mb-1 ${priority === 'stamps' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-slate-400'}`}>數量優先</span>
+                      <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold leading-tight text-center">使用最少數量郵票<br/>(預設組合)</span>
                     </button>
                     <button 
                       onClick={() => setPriority('varieties')}
                       className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${priority === 'varieties' ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 opacity-60'}`}
                     >
-                      <span className={`text-xs font-black mb-1 ${priority === 'varieties' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}`}>款數少優先</span>
-                      <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold leading-tight">儘量減少面值種類</span>
+                      <span className={`text-xs font-black mb-1 ${priority === 'varieties' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}`}>面值優先</span>
+                      <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold leading-tight text-center">減少面額種類<br/>(可能有出人意表的組合)</span>
                     </button>
                   </div>
                 </div>
