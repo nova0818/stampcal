@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>郵票組合計數機</title>
+  <title>郵費組合計算機</title>
   <!-- Browser Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%225%22 y=%225%22 width=%2290%22 height=%2290%22 rx=%225%22 fill=%22%233b82f6%22/><path d=%22M25 40 L50 60 L75 40%22 fill=%22none%22 stroke=%22white%22 stroke-width=%228%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/><rect x=%2220%22 y=%2230%22 width=%2260%22 height=%2245%22 fill=%22none%22 stroke=%22white%22 stroke-width=%225%22 rx=%223%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(50, 5)%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(50, 95)%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(5, 50)%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(95, 50)%22/></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -40,6 +40,7 @@
     .app-container {
       min-height: 100vh;
       min-height: -webkit-fill-available;
+      transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
     * {
       transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
@@ -47,7 +48,7 @@
   </style>
 <link rel="stylesheet" href="/index.css">
 </head>
-<body class="bg-slate-50 dark:bg-slate-900">
+<body class="bg-slate-50 dark:bg-slate-900 overflow-x-hidden">
   <div id="root"></div>
 
   <script type="text/babel">
@@ -231,8 +232,17 @@
 
       const unavailableStamps = DENOMINATIONS.filter(d => disabledStamps.includes(d.id));
 
+      // 背景類別計算
+      const bgClasses = useMemo(() => {
+        if (priority === 'stamps') {
+          return "bg-blue-50 dark:bg-slate-950"; // 數量優先 (藍色系)
+        } else {
+          return "bg-purple-50 dark:bg-purple-950"; // 面值優先 (紫色系)
+        }
+      }, [priority]);
+
       return (
-        <div className="app-container flex flex-col items-center justify-between">
+        <div className={`app-container flex flex-col items-center justify-between ${bgClasses}`}>
           <div className="max-w-md w-full flex flex-col p-4 space-y-3">
             
             {activeTab === 'calc' ? (
