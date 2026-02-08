@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>郵費組合計算機</title>
   <!-- Browser Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%225%22 y=%225%22 width=%2290%22 height=%2290%22 rx=%225%22 fill=%22%233b82f6%22/><path d=%22M25 40 L50 60 L75 40%22 fill=%22none%22 stroke=%22white%22 stroke-width=%228%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/><rect x=%2220%22 y=%2230%22 width=%2260%22 height=%2245%22 fill=%22none%22 stroke=%22white%22 stroke-width=%225%22 rx=%223%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(50, 5)%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(50, 95)%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(5, 50)%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(95, 50)%22/></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%225%22 y=%225%22 width=%2290%22 height=%2290%22 rx=%225%22 fill=%22%2300703c%22/><path d=%22M25 40 L50 60 L75 40%22 fill=%22none%22 stroke=%22white%22 stroke-width=%228%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/><rect x=%2220%22 y=%2230%22 width=%2260%22 height=%2245%22 fill=%22none%22 stroke=%22white%22 stroke-width=%225%22 rx=%223%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(50, 5)%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(50, 95)%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(5, 50)%22/><circle cx=%220%22 cy=%220%22 r=%226%22 fill=%22%23f8fafc%22 transform=%22translate(95, 50)%22/></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -17,6 +17,11 @@
       theme: {
         extend: {
           colors: {
+            hkPost: {
+              light: '#e6f4ea',
+              DEFAULT: '#00703c',
+              dark: '#004d2a',
+            },
             deepPurple: '#0a0118',
             deepBlue: '#010413',
           }
@@ -83,7 +88,7 @@
 
     const StampIcon = ({ className = "w-5 h-5" }) => (
       <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M21 8V16C21 18.7614 18.7614 21 16 21H8C5.23858 21 3 18.7614 3 16V8C3 5.23858 5.23858 3 8 3H16C18.7614 3 21 5.23858 21 8Z" fill="#3B82F6"/>
+        <path d="M21 8V16C21 18.7614 18.7614 21 16 21H8C5.23858 21 3 18.7614 3 16V8C3 5.23858 5.23858 3 8 3H16C18.7614 3 21 5.23858 21 8Z" fill="#00703c"/>
         <path d="M7 9L12 12.5L17 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <rect x="6" y="8" width="12" height="8" rx="1" stroke="white" strokeWidth="1.5"/>
         <circle cx="12" cy="3" r="1.5" className="fill-slate-50 dark:fill-slate-900"/>
@@ -242,7 +247,7 @@
 
       const bgClasses = useMemo(() => {
         if (priority === 'stamps') {
-          return "bg-blue-50 dark:bg-deepBlue";
+          return "bg-green-50 dark:bg-deepBlue";
         } else {
           return "bg-purple-50 dark:bg-deepPurple";
         }
@@ -263,7 +268,7 @@
                     <div className="flex items-center gap-1">
                       <button 
                         onClick={() => setIsDarkMode(!isDarkMode)}
-                        className="p-1.5 text-slate-400 dark:text-slate-500 active:text-blue-500 active:scale-95 transition-all"
+                        className={`p-1.5 active:scale-95 transition-all ${priority === 'stamps' ? 'text-slate-400 dark:text-slate-500 active:text-hkPost' : 'text-slate-400 dark:text-slate-500 active:text-purple-500'}`}
                         aria-label="Toggle Theme"
                       >
                         {isDarkMode ? (
@@ -274,7 +279,7 @@
                       </button>
                       <button 
                         onClick={() => setActiveTab('settings')}
-                        className="p-1.5 text-slate-400 dark:text-slate-500 active:text-blue-500 active:scale-95 transition-all"
+                        className={`p-1.5 active:scale-95 transition-all ${priority === 'stamps' ? 'text-slate-400 dark:text-slate-500 active:text-hkPost' : 'text-slate-400 dark:text-slate-500 active:text-purple-500'}`}
                         aria-label="Settings"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -288,7 +293,7 @@
                       <div className="text-4xl font-black text-slate-900 dark:text-white flex items-center gap-1">
                         <span className="text-slate-300 dark:text-slate-600 text-2xl">$</span>
                         <span>{targetPostage || '0'}</span>
-                        <span className="w-0.5 h-8 bg-blue-500 animate-pulse rounded-full ml-1"></span>
+                        <span className={`w-0.5 h-8 animate-pulse rounded-full ml-1 ${priority === 'stamps' ? 'bg-hkPost' : 'bg-purple-500'}`}></span>
                       </div>
                     </div>
                     
@@ -296,8 +301,8 @@
                       onClick={() => setPriority(prev => prev === 'stamps' ? 'varieties' : 'stamps')}
                       className={`flex flex-col items-center justify-center px-3 py-2 rounded-xl border-2 transition-all active:scale-95 shadow-sm
                         ${priority === 'stamps' 
-                          ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' 
-                          : 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400'}`}
+                          ? 'border-hkPost bg-green-50 dark:bg-green-900/20 text-hkPost dark:text-green-400' 
+                          : 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400'}`}
                     >
                       {priority === 'stamps' ? (
                         <>
@@ -315,16 +320,16 @@
                 </div>
 
                 <div className="shrink-0 flex flex-col space-y-2">
-                  <div className="h-[150px] w-full">
+                  <div className="min-h-[150px] w-full flex-shrink-0">
                     {bestCombination ? (
-                      <div className={`bg-white dark:bg-slate-800 rounded-2xl p-3 shadow-md border-2 flex flex-col h-full transition-all duration-300 ${priority === 'stamps' ? 'border-blue-500' : 'border-indigo-500'}`}>
+                      <div className={`bg-white dark:bg-slate-800 rounded-2xl p-3 shadow-md border-2 flex flex-col transition-all duration-300 ${priority === 'stamps' ? 'border-hkPost' : 'border-purple-500'}`}>
                         <div className="flex items-center justify-between mb-1 pb-1 border-b border-slate-100 dark:border-slate-700 shrink-0">
-                          <h2 className={`text-[11px] font-black uppercase tracking-wider ${priority === 'stamps' ? 'text-blue-600 dark:text-blue-400' : 'text-indigo-600 dark:text-indigo-400'}`}>
+                          <h2 className={`text-[11px] font-black uppercase tracking-wider ${priority === 'stamps' ? 'text-hkPost dark:text-green-400' : 'text-purple-600 dark:text-purple-400'}`}>
                             最佳方案 ({bestCombination.totalCount} 枚, {bestCombination.varietyCount} 款)
                           </h2>
                           <button onClick={() => handleKeyPress('C')} className="text-[11px] font-black text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-lg uppercase active:bg-red-100 transition-colors">清除</button>
                         </div>
-                        <div className="flex-1 overflow-y-auto custom-scrollbar">
+                        <div className="flex-1 overflow-hidden">
                           <div className="grid grid-cols-3 gap-y-2.5 gap-x-1 py-2">
                             {Object.entries(bestCombination.stamps).sort((a,b) => {
                                const valA = DENOMINATIONS.find(d => d.id === a[0])?.value || 0;
@@ -339,8 +344,8 @@
                                       {denom?.label}
                                     </div>
                                     <div className="flex items-center">
-                                      <span className={`${priority === 'stamps' ? 'text-blue-400 dark:text-blue-500' : 'text-indigo-400 dark:text-indigo-500'} text-xs font-black mr-0.5`}>×</span>
-                                      <span className={`text-2xl font-black leading-none ${priority === 'stamps' ? 'text-blue-600 dark:text-blue-400' : 'text-indigo-600 dark:text-indigo-400'}`}>{count}</span>
+                                      <span className={`${priority === 'stamps' ? 'text-green-400 dark:text-green-500' : 'text-purple-400 dark:text-purple-500'} text-xs font-black mr-0.5`}>×</span>
+                                      <span className={`text-2xl font-black leading-none ${priority === 'stamps' ? 'text-hkPost dark:text-green-400' : 'text-purple-600 dark:text-purple-400'}`}>{count}</span>
                                     </div>
                                   </div>
                                 </div>
@@ -350,7 +355,7 @@
                         </div>
                       </div>
                     ) : (
-                      <div className="h-full bg-white/40 dark:bg-slate-800/20 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 p-6 space-y-2 backdrop-blur-[2px]">
+                      <div className="h-[150px] bg-white/40 dark:bg-slate-800/20 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl flex flex-col items-center justify-center text-slate-400 dark:text-slate-600 p-6 space-y-2 backdrop-blur-[2px]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-20"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
                         <span className="text-[10px] uppercase font-black tracking-widest text-center">
                           {targetPostage && parseFloat(targetPostage) > 0 ? "無可用組合" : "請輸入金額"}
@@ -370,7 +375,7 @@
                         </div>
                         <button 
                           onClick={() => setDisabledStamps([])}
-                          className="text-[10px] font-black text-white bg-blue-500 hover:bg-blue-600 px-1.5 py-0.5 rounded transition-all shadow-sm active:scale-95 shrink-0"
+                          className={`text-[10px] font-black text-white px-1.5 py-0.5 rounded transition-all shadow-sm active:scale-95 shrink-0 ${priority === 'stamps' ? 'bg-hkPost hover:bg-hkPost-dark' : 'bg-purple-600 hover:bg-purple-700'}`}
                         >
                           全部解除
                         </button>
@@ -412,16 +417,16 @@
                   <div className="grid grid-cols-2 gap-3">
                     <button 
                       onClick={() => setPriority('stamps')}
-                      className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${priority === 'stamps' ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 opacity-60'}`}
+                      className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${priority === 'stamps' ? 'border-hkPost bg-green-50 dark:bg-green-900/20' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 opacity-60'}`}
                     >
-                      <span className={`text-xs font-black mb-1 ${priority === 'stamps' ? 'text-blue-600 dark:text-blue-400' : 'text-slate-500 dark:text-slate-400'}`}>數量優先</span>
+                      <span className={`text-xs font-black mb-1 ${priority === 'stamps' ? 'text-hkPost dark:text-green-400' : 'text-slate-500 dark:text-slate-400'}`}>數量優先</span>
                       <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold leading-tight text-center">使用最少數量郵票<br/>(預設組合)</span>
                     </button>
                     <button 
                       onClick={() => setPriority('varieties')}
-                      className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${priority === 'varieties' ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 opacity-60'}`}
+                      className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${priority === 'varieties' ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40 opacity-60'}`}
                     >
-                      <span className={`text-xs font-black mb-1 ${priority === 'varieties' ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-500 dark:text-slate-400'}`}>面值優先</span>
+                      <span className={`text-xs font-black mb-1 ${priority === 'varieties' ? 'text-purple-600 dark:text-purple-400' : 'text-slate-500 dark:text-slate-400'}`}>面值優先</span>
                       <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold leading-tight text-center">減少面額種類<br/>(可能有出人意表的組合)</span>
                     </button>
                   </div>
@@ -436,7 +441,7 @@
                       </div>
                       <button 
                         onClick={() => setDisabledStamps([])}
-                        className="text-[11px] font-black text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-3 py-1 rounded-lg uppercase active:bg-blue-100 transition-all"
+                        className={`text-[11px] font-black px-3 py-1 rounded-lg uppercase active:opacity-70 transition-all ${priority === 'stamps' ? 'text-hkPost bg-green-50 dark:bg-green-900/20' : 'text-purple-600 bg-purple-50 dark:bg-purple-900/20'}`}
                       >
                         重設全部
                       </button>
@@ -468,7 +473,7 @@
                   </div>
                   <button 
                     onClick={() => setActiveTab('calc')}
-                    className="w-full mt-6 py-3 bg-blue-600 text-white font-black rounded-xl shadow-lg shadow-blue-200 dark:shadow-none active:scale-95 transition-all uppercase tracking-widest text-xs"
+                    className={`w-full mt-6 py-3 text-white font-black rounded-xl shadow-lg active:scale-95 transition-all uppercase tracking-widest text-xs ${priority === 'stamps' ? 'bg-hkPost shadow-green-200 dark:shadow-none' : 'bg-purple-600 shadow-purple-200 dark:shadow-none'}`}
                   >
                     確認並返回
                   </button>
@@ -479,12 +484,12 @@
             {activeTab === 'about' && (
               <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="p-3 bg-blue-500 rounded-2xl shadow-lg shadow-blue-500/20">
+                  <div className={`p-3 rounded-2xl shadow-lg ${priority === 'stamps' ? 'bg-hkPost shadow-hkPost/20' : 'bg-purple-600 shadow-purple-600/20'}`}>
                     <StampIcon className="w-8 h-8" />
                   </div>
                   <div>
                     <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100 tracking-tight leading-none mb-1">關於</h2>
-                    <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest">郵費組合計算機</p>
+                    <p className={`text-[10px] font-black uppercase tracking-widest ${priority === 'stamps' ? 'text-hkPost' : 'text-purple-600'}`}>郵費組合計算機</p>
                   </div>
                 </div>
 
@@ -493,12 +498,12 @@
                   
                   <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-slate-700/50">
                     <div className="flex items-center gap-2 mb-2">
-                      <svg className="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="currentColor">
+                      <svg className={`w-4 h-4 ${priority === 'stamps' ? 'text-emerald-500' : 'text-purple-500'}`} viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2L14.85 9.15L22 12L14.85 14.85L12 22L9.15 14.85L2 12L9.15 9.15L12 2Z" />
                       </svg>
                       <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500">技術支援</span>
                     </div>
-                    <p className="text-xs">本應用程式由 <span className="text-slate-800 dark:text-slate-200 font-bold">Google Gemini</span> 模型輔助開發，實現了精確的組合優化算法與流暢的介面體驗。</p>
+                    <p className="text-xs">本應用程式由 <span className={`${priority === 'stamps' ? 'text-hkPost' : 'text-purple-600'} font-bold`}>Google Gemini</span> 模型輔助開發，實現了精確的組合優化算法與流暢的介面體驗。</p>
                   </div>
 
                   <p className="text-center italic opacity-70 pt-2 border-t border-slate-100 dark:border-slate-700">「僅供參考，純屬好玩 🤡」</p>
@@ -506,7 +511,7 @@
 
                 <button 
                   onClick={() => setActiveTab('calc')}
-                  className="w-full mt-8 py-3 bg-blue-600 text-white font-black rounded-xl shadow-lg shadow-blue-200 dark:shadow-none active:scale-95 transition-all uppercase tracking-widest text-xs"
+                  className={`w-full mt-8 py-3 text-white font-black rounded-xl shadow-lg active:scale-95 transition-all uppercase tracking-widest text-xs ${priority === 'stamps' ? 'bg-hkPost shadow-green-200' : 'bg-purple-600 shadow-purple-200'}`}
                 >
                   返回首頁
                 </button>
@@ -519,14 +524,14 @@
             className="w-full py-6 flex flex-col items-center gap-2 opacity-60 hover:opacity-100 transition-opacity cursor-pointer group"
           >
             <div className="h-[1px] w-12 bg-slate-300 dark:bg-slate-700/50 mb-2"></div>
-            <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase group-hover:text-blue-500 transition-colors">
+            <p className={`text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase transition-colors ${priority === 'stamps' ? 'group-hover:text-hkPost' : 'group-hover:text-purple-600'}`}>
               Just for fun 🤡
             </p>
             <div className="flex items-center gap-1.5">
-              <svg className="w-3 h-3 text-blue-500 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
+              <svg className={`w-3 h-3 group-hover:scale-110 transition-transform ${priority === 'stamps' ? 'text-hkPost' : 'text-purple-600'}`} viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2L14.85 9.15L22 12L14.85 14.85L12 22L9.15 14.85L2 12L9.15 9.15L12 2Z" />
               </svg>
-              <p className="text-[9px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest group-hover:text-blue-500 transition-colors">
+              <p className={`text-[9px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest transition-colors ${priority === 'stamps' ? 'group-hover:text-hkPost' : 'group-hover:text-purple-600'}`}>
                 Powered by Google Gemini
               </p>
             </div>
