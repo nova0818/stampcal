@@ -1,0 +1,17 @@
+{
+  "name": "郵費組合計算機",
+  "short_name": "郵費計算",
+  "description": "智能郵票面額組合計算工具",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#00703c",
+  "theme_color": "#00703c",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect x=%225%22 y=%225%22 width=%2290%22 height=%2290%22 rx=%2210%22 fill=%22%2300703c%22/><path d=%22M20 35 L50 60 L80 35%22 fill=%22none%22 stroke=%22white%22 stroke-width=%228%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/><rect x=%2220%22 y=%2235%22 width=%2260%22 height=%2240%22 fill=%22none%22 stroke=%22white%22 stroke-width=%226%22 rx=%224%22/><circle cx=%2270%22 cy=%2265%22 r=%2212%22 fill=%22white%22/><text x=%2270%22 y=%2272%22 font-family=%22Arial%22 font-size=%2216%22 font-weight=%22900%22 text-anchor=%22middle%22 fill=%22%2300703c%22>$</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
