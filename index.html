@@ -551,7 +551,7 @@
                 <div className="flex-1 overflow-y-auto p-4 space-y-6 pb-[calc(7rem+env(safe-area-inset-bottom))] custom-scrollbar">
                   {/* Priority Mode */}
                   <div className="space-y-3">
-                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest pl-1">方案優先順序</h3>
+                    <h3 className="text-sm font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest pl-1">方案優先順序</h3>
                     <div className="grid grid-cols-2 gap-3">
                       <button onClick={() => setPriority('stamps')} className={`flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all shadow-sm ${priority === 'stamps' ? 'border-hkPost bg-green-50 dark:bg-green-900/20' : 'border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 opacity-60'}`}>
                         <span className={`text-sm font-black mb-1 ${priority === 'stamps' ? 'text-hkPost dark:text-green-400' : 'text-slate-500 dark:text-slate-400'}`}>數量優先</span>
@@ -567,8 +567,8 @@
                   {/* Stock Settings */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between pl-1">
-                      <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">通用郵票庫存</h3>
-                      <button onClick={() => setDisabledStamps([])} className={`text-[10px] font-black px-2 py-0.5 rounded-lg uppercase transition-all ${priority === 'stamps' ? 'text-hkPost bg-green-50 dark:bg-green-900/20' : 'text-purple-600 bg-purple-50 dark:bg-purple-900/20'}`}>重設</button>
+                      <h3 className="text-sm font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">通用郵票庫存</h3>
+                      <button onClick={() => setDisabledStamps([])} className={`text-xs font-black px-3 py-1 rounded-lg uppercase transition-all ${priority === 'stamps' ? 'text-hkPost bg-green-50 dark:bg-green-900/20' : 'text-purple-600 bg-purple-50 dark:bg-purple-900/20'}`}>重設</button>
                     </div>
                     <div className="grid grid-cols-4 gap-3 bg-slate-50 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
                       {DENOMINATIONS.map(d => {
@@ -589,8 +589,8 @@
                   {/* Custom Denominations */}
                   <div className="space-y-3">
                     <div className="flex items-center justify-between pl-1">
-                      <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">自訂郵票面額 (選填)</h3>
-                      <button onClick={() => setCustomStamps([])} className={`text-[10px] font-black px-2 py-0.5 rounded-lg uppercase transition-all ${priority === 'stamps' ? 'text-hkPost bg-green-50 dark:bg-green-900/20' : 'text-purple-600 bg-purple-50 dark:bg-purple-900/20'}`}>清空</button>
+                      <h3 className="text-sm font-black text-slate-600 dark:text-slate-300 uppercase tracking-widest">自訂郵票面額 (選填)</h3>
+                      <button onClick={() => setCustomStamps([])} className={`text-xs font-black px-3 py-1 rounded-lg uppercase transition-all ${priority === 'stamps' ? 'text-hkPost bg-green-50 dark:bg-green-900/20' : 'text-purple-600 bg-purple-50 dark:bg-purple-900/20'}`}>清空</button>
                     </div>
                     <div className="bg-slate-50 dark:bg-slate-800/40 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 space-y-4">
                       <div className="flex w-full gap-2">
