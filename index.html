@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="郵費計算">
-  <!-- Browser Favicon -->
+  <!-- Browser Favicon remains the envelope logo -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2224%22 fill=%22%2300703c%22/><rect x=%2218%22 y=%2228%22 width=%2264%22 height=%2244%22 rx=%224%22 fill=%22white%22/><path d=%22M18 30 L50 52 L82 30%22 fill=%22none%22 stroke=%22%23cbd5e1%22 stroke-width=%224%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/><circle cx=%2274%22 cy=%2268%22 r=%2218%22 fill=%22%23facc15%22/><text x=%2274%22 y=%2275%22 font-family=%22Arial%22 font-size=%2222%22 font-weight=%22900%22 text-anchor=%22middle%22 fill=%22%23854d0e%22>$</text></svg>">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -106,6 +106,10 @@
       </svg>
     );
 
+    const ThemeBar = ({ priority }) => (
+      <div className={`w-1.5 h-6 rounded-full ${priority === 'stamps' ? 'bg-hkPost' : 'bg-purple-600'}`}></div>
+    );
+
     function App() {
       const [targetPostage, setTargetPostage] = useState('');
       const [activeTab, setActiveTab] = useState('calc');
@@ -125,7 +129,6 @@
       });
 
       useEffect(() => {
-        // Detect if app is already running in standalone mode
         if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
           setIsStandalone(true);
         }
@@ -301,7 +304,7 @@
                 <div className="bg-white dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700/50 flex flex-col shrink-0">
                   <div className="flex items-center justify-between mb-3 border-b border-slate-50 dark:border-slate-700/50 pb-2">
                     <div className="flex items-center gap-2">
-                      <StampIcon className="w-6 h-6" />
+                      <ThemeBar priority={priority} />
                       <h2 className="text-lg font-black text-slate-800 dark:text-slate-100 tracking-tight">郵費組合計算機</h2>
                     </div>
                     <div className="flex items-center gap-1">
@@ -449,7 +452,7 @@
                 <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-700">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
-                      <StampIcon className="w-6 h-6" />
+                      <ThemeBar priority={priority} />
                       <h2 className="text-lg font-black text-slate-800 dark:text-slate-100 tracking-tight">方案優先順序</h2>
                     </div>
                   </div>
@@ -475,7 +478,7 @@
                   <div className="flex flex-col mb-4">
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
-                        <StampIcon className="w-6 h-6" />
+                        <ThemeBar priority={priority} />
                         <h2 className="text-lg font-black text-slate-800 dark:text-slate-100 tracking-tight">庫存設定</h2>
                       </div>
                       <button 
