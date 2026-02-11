@@ -223,6 +223,22 @@
         }
       };
 
+      const handleShare = async () => {
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: '郵費組合計算機',
+              text: '這是一個超好用的郵票組合計算工具，能幫你運算最理想的郵費貼法！',
+              url: window.location.href,
+            });
+          } catch (err) {
+            console.log('Error sharing:', err);
+          }
+        } else {
+          triggerWarning('您的瀏覽器不支援原生分享功能');
+        }
+      };
+
       const addCustomStamp = () => {
         const val = parseFloat(customInputValue);
         if (isNaN(val) || val <= 0) {
@@ -715,7 +731,7 @@
                       <circle cx="78" cy="72" r="22" fill="#facc15" />
                       <text x="78" y="80" textAnchor="middle" fontSize="26" fontWeight="900" fill="#854d0e">$</text>
                     </svg>
-                    <div className="absolute -bottom-2 -right-2 bg-hkPost text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg">V3.0</div>
+                    <div className="absolute -bottom-2 -right-2 bg-hkPost text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg">V3.1</div>
                   </div>
                   <h2 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter">郵費組合計算機</h2>
                   <p className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mt-1">Stamp Combination Calculator</p>
@@ -797,9 +813,15 @@
                       </p>
                     </div>
                     
-                    <button onClick={() => setActiveTab('calc')} className={`px-12 py-3 text-white font-black rounded-full active:scale-95 transition-all uppercase tracking-[0.2em] text-xs shadow-xl ${priority === 'stamps' ? 'bg-hkPost shadow-green-500/20' : 'bg-purple-600 shadow-purple-500/20'}`}>
-                      返回首頁
-                    </button>
+                    <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
+                      <button onClick={handleShare} className="flex-1 py-3 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-black rounded-2xl active:scale-95 transition-all uppercase tracking-widest text-[11px] shadow-sm flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+                        分享程式
+                      </button>
+                      <button onClick={() => setActiveTab('calc')} className={`flex-1 py-3 text-white font-black rounded-2xl active:scale-95 transition-all uppercase tracking-widest text-[11px] shadow-xl ${priority === 'stamps' ? 'bg-hkPost shadow-green-500/20' : 'bg-purple-600 shadow-purple-500/20'}`}>
+                        返回首頁
+                      </button>
+                    </div>
                     
                     <p className="text-[9px] font-black text-slate-300 dark:text-slate-700 tracking-[0.4em] uppercase">Built with 💚 for HK</p>
                   </div>
